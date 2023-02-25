@@ -3,7 +3,6 @@
 importing
 """
 import random
-
 '''
 functions
 '''
@@ -28,7 +27,8 @@ def get_number_from_index(row, col): #geting number from index
 def get_index_from_number(num): #geting index from number
     num -= 1
     row = num // 4
-    col = num % 3
+    col = num % 4
+
     return row, col
 
 def get_2_or_4(mas, row, col): #geting two or four
