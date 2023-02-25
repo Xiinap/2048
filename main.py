@@ -2,30 +2,102 @@
 '''
 importing
 '''
+import pygame
 from logics import *  # from logics.py import all functions
-import random
+import sys
+pygame.init()
 
+'''
+drawing interface
+'''
+def draw_interface():
+    screen.fill(MARGIN_COLOR)
+    pygame.draw.rect(screen, WHITE, TITLE_RECT)
+    #here'll be code...
+
+    for row in range(BLOCKS):
+        for col in range(BLOCKS):
+
+            value = mas[row][col]
+            w = col * SIZE_BLOCK + (col + 1) * MARGIN
+            h = row * SIZE_BLOCK + (row + 1) * MARGIN + SIZE_BLOCK
+            pygame.draw.rect(screen, COLORS[value], (w, h, SIZE_BLOCK, SIZE_BLOCK))
+
+
+'''
+settings
+'''
+#colors
+BLACK = [0, 0, 0]
+WHITE = [255, 255, 255]
+GRAY = [122, 118, 93]
+MARGIN_COLOR = [187, 173, 162]
+TEXT_COLOR = [255, 127, 0]
+
+#library with colors for squares
+COLORS = {
+    0: [205, 193, 181],
+    2: [240, 230, 221],
+    4: [236, 223, 203],
+    8: [241, 177, 123],
+    16: [242, 152, 105],
+    32: [242, 125, 105],
+    64: [244, 96, 69],
+    128: [235, 206, 118],
+    256: [237, 203, 103],
+    512: [236, 200, 89],
+    1024: [232, 194, 88],
+    2048: [176, 22, 219]
+}
+
+#sizes
+BLOCKS = 4
+SIZE_BLOCK = 100
+MARGIN = 10
+WIDTH = BLOCKS * SIZE_BLOCK + (BLOCKS + 1) * MARGIN
+HEIGHT = WIDTH + SIZE_BLOCK
+TITLE_RECT = pygame.Rect(0, 0, WIDTH, SIZE_BLOCK)
+
+# massive 4x4
 mas = [[0, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0],
-       [0, 0, 0, 0]]  # massive 4x4
+       [0, 0, 0, 0]]
 
-# reading massive
-mas[2][0] = 2
-mas[3][2] = 4
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('2048')
 
-# using logics.py
+#reading massive
+mas[random.randint(0, 3)][random.randint(0, 3)] = 2
+mas[random.randint(0, 3)][random.randint(0, 3)] = 4
+#mas[random.randint(0, 3)][random.randint(0, 3)] = 8
+#mas[random.randint(0, 3)][random.randint(0, 3)] = 16
+#mas[random.randint(0, 3)][random.randint(0, 3)] = 32
 
 
+draw_interface()
+pygame.display.update()
+
+'''
+game while
+'''
 while is_zero_in_mas(mas):
-    '''
-    getting random number in main
-    '''
-    input()
-    empty = get_empty_list(mas)
-    random.shuffle(empty)
-    random_num = empty.pop()
-    row, col = get_index_from_number(random_num)
-    mas = get_2_or_4(mas, row, col)
-    print(f"WE FILL ELEMENT WITH NUMBER {random_num}")
-    pretty_printer(mas)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        elif event.type == pygame.KEYDOWN:
+            '''
+            getting random number in main
+            '''
+            empty = get_empty_list(mas)
+            random.shuffle(empty)
+            random_num = empty.pop()
+            row, col = get_index_from_number(random_num)
+            mas = get_2_or_4(mas, row, col)
+            print(f"WE FILL ELEMENT WITH NUMBER {random_num}")
+            pretty_printer(mas)
+
+            draw_interface()
+            pygame.display.update()
