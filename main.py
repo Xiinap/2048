@@ -13,19 +13,30 @@ drawing interface
 def draw_interface():
     screen.fill(MARGIN_COLOR)
     pygame.draw.rect(screen, WHITE, TITLE_RECT)
-    #here'll be code...
+    font = pygame.font.SysFont('sixingkai', 70)
 
     for row in range(BLOCKS):
         for col in range(BLOCKS):
 
             value = mas[row][col]
+
+            if value < 8:
+                text = font.render(f"{value}", 1, GRAY)
+            else:
+                text = font.render(f"{value}", 1, WHITE)
+
             w = col * SIZE_BLOCK + (col + 1) * MARGIN
             h = row * SIZE_BLOCK + (row + 1) * MARGIN + SIZE_BLOCK
             pygame.draw.rect(screen, COLORS[value], (w, h, SIZE_BLOCK, SIZE_BLOCK))
 
+            if value != 0:
+                font_w, font_h = text.get_size()
+                text_x = w + (SIZE_BLOCK - font_w) / 2
+                text_y = h + (SIZE_BLOCK - font_h) / 2
+                screen.blit(text, (text_x, text_y))
 
 '''
-settings
+settings 
 '''
 #colors
 BLACK = [0, 0, 0]
@@ -88,6 +99,14 @@ while is_zero_in_mas(mas):
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                mas = move_left(mas)
+            elif event.key == pygame.K_RIGHT:
+                mas = move_right(mas)
+            elif event.key == pygame.K_UP:
+                mas = move_up(mas)
+            elif event.key == pygame.K_DOWN:
+                mas = move_down(mas)
             '''
             getting random number in main
             '''
