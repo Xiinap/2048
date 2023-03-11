@@ -10,10 +10,18 @@ pygame.init()
 '''
 drawing interface
 '''
-def draw_interface():
+def draw_interface(score, delta=0):
     screen.fill(MARGIN_COLOR)
     pygame.draw.rect(screen, WHITE, TITLE_RECT)
     font = pygame.font.SysFont('sixingkai', 70)
+    font_score = pygame.font.SysFont('sixingkai', 48)
+    font_delta = pygame.font.SysFont('sixingkai', 24)
+    text_score = font_score.render(f"Score: {score}", 1, TEXT_COLOR)
+    screen.blit(text_score, (30, 30))
+
+    if delta > 0:
+        text_delta = font_delta.render(f"+{delta}", 1, TEXT_COLOR)
+        screen.blit(text_delta, (150, 65))
 
     for row in range(BLOCKS):
         for col in range(BLOCKS):
@@ -75,6 +83,8 @@ mas = [[0, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0]]
 
+score = 0
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('2048')
 
@@ -85,8 +95,7 @@ mas[random.randint(0, 3)][random.randint(0, 3)] = 4
 #mas[random.randint(0, 3)][random.randint(0, 3)] = 16
 #mas[random.randint(0, 3)][random.randint(0, 3)] = 32
 
-
-draw_interface()
+draw_interface(score)
 pygame.display.update()
 
 '''
@@ -99,14 +108,17 @@ while is_zero_in_mas(mas):
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
+            delta = 0
             if event.key == pygame.K_LEFT:
-                mas = move_left(mas)
+                mas, delta = move_left(mas)
             elif event.key == pygame.K_RIGHT:
-                mas = move_right(mas)
+                mas, delta = move_right(mas)
             elif event.key == pygame.K_UP:
-                mas = move_up(mas)
+                mas, delta = move_up(mas)
             elif event.key == pygame.K_DOWN:
-                mas = move_down(mas)
+                mas, delta = move_down(mas)
+
+            score += delta
             '''
             getting random number in main
             '''
@@ -118,5 +130,5 @@ while is_zero_in_mas(mas):
             print(f"WE FILL ELEMENT WITH NUMBER {random_num}")
             pretty_printer(mas)
 
-            draw_interface()
+            draw_interface(score, delta)
             pygame.display.update()
