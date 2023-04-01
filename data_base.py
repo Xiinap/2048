@@ -16,6 +16,12 @@ create table if not exists RECORDS(
     score integer
 )""")
 
+def insert_result(name, score):
+    cursor.execute("""
+        insert into RECORDS values(?, ?)
+    """, (name, score))
+    db.commit()
+
 def get_best():
     cursor.execute("""
         SELECT ROWID, name, score from RECORDS
@@ -26,4 +32,4 @@ def get_best():
     return cursor.fetchall()
 
 result = get_best()
-print(result)
+#print(result)
