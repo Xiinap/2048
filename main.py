@@ -49,6 +49,10 @@ def draw_interface(score, delta=0):
             else:
                 text = font.render(f"{value}", 1, WHITE)
 
+            if value >= 1024:
+                font2 = pygame.font.SysFont('sixingkai', 59)
+                text = font2.render(f"{value}", 1, WHITE)
+
             w = col * SIZE_BLOCK + (col + 1) * MARGIN
             h = row * SIZE_BLOCK + (row + 1) * MARGIN + SIZE_BLOCK
             pygame.draw.rect(screen, COLORS[value], (w, h, SIZE_BLOCK, SIZE_BLOCK))
@@ -83,8 +87,6 @@ COLORS = {
     1024: [232, 194, 88],
     2048: [176, 22, 219],
     4096: [29, 171, 55],
-    8192: [100, 27, 143],
-    16384: [189, 19, 70],
 }
 
 #sizes
@@ -104,11 +106,12 @@ mas = [[0, 0, 0, 0],
 score = 0
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('2048')
+pygame.display.set_caption('4096 by Xiinap')
+pygame.display.set_icon(pygame.image.load("icon.png"))
 
 #reading massive
-mas[random.randint(0, 3)][random.randint(0, 3)] = 2
-mas[random.randint(0, 3)][random.randint(0, 3)] = 4
+mas[random.randint(0, 3)][random.randint(0, 3)] = 2048
+mas[random.randint(0, 3)][random.randint(0, 3)] = 2048
 '''
 mas[random.randint(0, 3)][random.randint(0, 3)] = 8
 mas[random.randint(0, 3)][random.randint(0, 3)] = 16
