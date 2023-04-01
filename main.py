@@ -6,10 +6,24 @@ import pygame
 from logics import *  # from logics.py import all functions
 import sys
 pygame.init()
-
+from date_base import *
 '''
 drawing interface
 '''
+GAMER_DB = get_best()
+
+def draw_top_gamers():
+    font_best = pygame.font.SysFont('sixingkai', 20)
+    text_best = font_best.render("Top players", 1, TEXT_COLOR)
+    screen.blit(text_best, (275, 15))
+
+    for index, gamer in enumerate(GAMER_DB):
+        name = gamer[1]
+        score = gamer[2]
+        record = f"{index + 1}, {name} - {score}"
+        text_gamer = font_best.render(record, 1, TEXT_COLOR)
+        screen.blit(text_gamer, (275, 35 + 20 * index))
+
 def draw_interface(score, delta=0):
     screen.fill(MARGIN_COLOR)
     pygame.draw.rect(screen, WHITE, TITLE_RECT)
@@ -22,6 +36,8 @@ def draw_interface(score, delta=0):
     if delta > 0:
         text_delta = font_delta.render(f"+{delta}", 1, TEXT_COLOR)
         screen.blit(text_delta, (150, 65))
+
+    draw_top_gamers()
 
     for row in range(BLOCKS):
         for col in range(BLOCKS):
@@ -42,7 +58,6 @@ def draw_interface(score, delta=0):
                 text_x = w + (SIZE_BLOCK - font_w) / 2
                 text_y = h + (SIZE_BLOCK - font_h) / 2
                 screen.blit(text, (text_x, text_y))
-
 '''
 settings 
 '''
@@ -66,7 +81,10 @@ COLORS = {
     256: [237, 203, 103],
     512: [236, 200, 89],
     1024: [232, 194, 88],
-    2048: [176, 22, 219]
+    2048: [176, 22, 219],
+    4096: [29, 171, 55],
+    8192: [100, 27, 143],
+    16384: [189, 19, 70],
 }
 
 #sizes
@@ -91,13 +109,14 @@ pygame.display.set_caption('2048')
 #reading massive
 mas[random.randint(0, 3)][random.randint(0, 3)] = 2
 mas[random.randint(0, 3)][random.randint(0, 3)] = 4
-#mas[random.randint(0, 3)][random.randint(0, 3)] = 8
-#mas[random.randint(0, 3)][random.randint(0, 3)] = 16
-#mas[random.randint(0, 3)][random.randint(0, 3)] = 32
+'''
+mas[random.randint(0, 3)][random.randint(0, 3)] = 8
+mas[random.randint(0, 3)][random.randint(0, 3)] = 16
+mas[random.randint(0, 3)][random.randint(0, 3)] = 32
+'''
 
 draw_interface(score)
 pygame.display.update()
-
 '''
 game while
 '''
@@ -127,8 +146,8 @@ while is_zero_in_mas(mas):
             random_num = empty.pop()
             row, col = get_index_from_number(random_num)
             mas = get_2_or_4(mas, row, col)
-            print(f"WE FILL ELEMENT WITH NUMBER {random_num}")
-            pretty_printer(mas)
+            #print(f"WE FILL ELEMENT WITH NUMBER {random_num}")
+            #pretty_printer(mas)
 
             draw_interface(score, delta)
             pygame.display.update()
