@@ -1,49 +1,48 @@
-# logics file
-"""
-importing
-"""
 import random
-'''
-functions
-'''
-def pretty_printer(mas): #print massive in strokes
+
+
+def pretty_printer(mas):
     print('-' * 8)
     for row in mas:
         print(*row)
     print('-' * 8)
 
-def get_empty_list(mas):  # massive without elements
-    empty = []
-    for row in range(4):
-        for col in range(4):
-            if mas[row][col] == 0:
-                num = get_number_from_index(row, col)
-                empty.append(num)
-    return empty
 
-def get_number_from_index(row, col): #geting number from index
-    return row * 4 + col + 1
+def get_number_from_index(i, j):
+    return i * 4 + j + 1
 
-def get_index_from_number(num): #geting index from number
+
+def get_index_from_number(num):
     num -= 1
-    row = num // 4
-    col = num % 4
+    x, y = num // 4, num % 4
+    return x, y
 
-    return row, col
 
-def get_2_or_4(mas, row, col): #geting two or four
-    #for this function we cant create test because here is random n we cant test random =)
-    if random.random() <= 0.8: #0.8 = 80 precent is two
-        mas[row][col] = 2
+def insert_2_or_4(mas, x, y):
+    if random.random() <= 0.75:
+        mas[x][y] = 2
     else:
-        mas[row][col] = 4
+        mas[x][y] = 4
+
     return mas
 
-def is_zero_in_mas(mas): #True or False
+
+def is_zero_in_mas(mas):
     for row in mas:
         if 0 in row:
             return True
     return False
+
+
+def get_empty_list(mas):
+    empty = []
+    for i in range(4):
+        for j in range(4):
+            if mas[i][j] == 0:
+                num = get_number_from_index(i, j)
+                empty.append(num)
+    return empty
+
 
 def move_left(mas):
     delta = 0
@@ -61,20 +60,21 @@ def move_left(mas):
                 mas[i].append(0)
     return mas, delta
 
-def move_right(mas):
+def move_rigth(mas):
     delta = 0
     for row in mas:
         while 0 in row:
             row.remove(0)
         while len(row) != 4:
-            row.insert(0, 0)
+            row.insert(0,0)
     for i in range(4):
         for j in range(3, 0, -1):
             if mas[i][j] == mas[i][j - 1] and mas[i][j] != 0:
                 mas[i][j] *= 2
                 delta += mas[i][j]
                 mas[i].pop(j - 1)
-                mas[i].insert(0, 0)
+                mas[i].insert(0,0)
+
     return mas, delta
 
 def move_up(mas):
@@ -82,18 +82,19 @@ def move_up(mas):
     for j in range(4):
         column = []
         for i in range(4):
-            if mas[i][j] !=0:
+            if mas[i][j] != 0:
                 column.append(mas[i][j])
         while len(column) != 4:
             column.append(0)
         for i in range(3):
-            if column[i] == column[i + 1] and column[i] != 0:
+            if column[i] == column[i+1] and column !=0:
                 column[i] *= 2
                 delta += column[i]
-                column.pop(i + 1)
+                column.pop(i+1)
                 column.append(0)
         for i in range(4):
             mas[i][j] = column[i]
+
     return mas, delta
 
 def move_down(mas):
@@ -104,13 +105,22 @@ def move_down(mas):
             if mas[i][j] != 0:
                 column.append(mas[i][j])
         while len(column) != 4:
-            column.insert(0, 0)
+            column.insert(0,0)
         for i in range(3, 0, -1):
-            if column[i] == column[i - 1] and column[i] != 0:
+            if column[i] == column[i-1] and column !=0:
                 column[i] *= 2
                 delta += column[i]
-                column.pop(i - 1)
-                column.insert(0, 0)
+                column.pop(i-1)
+                column.insert(0,0)
         for i in range(4):
             mas[i][j] = column[i]
+
     return mas, delta
+
+
+def can_move(mas):
+    for i in range(3):
+        for j in range(3):
+            if mas[i][j] == mas[i+1][j] or mas[i][j] == mas[i][j+1]:
+                return True
+    return False
